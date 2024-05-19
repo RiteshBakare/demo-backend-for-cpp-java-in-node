@@ -6,13 +6,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
 # Debug step: check available packages
-RUN apt-cache search g++ && apt-cache search openjdk-11-jdk
+RUN apt-cache search g++
 
 # Install g++
 RUN apt-get install -y g++
 
 # Install OpenJDK
-RUN apt-get install -y openjdk-11-jdk
+# RUN apt-get install -y openjdk-11-jdk
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
