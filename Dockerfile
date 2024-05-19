@@ -1,15 +1,21 @@
 FROM node:20
 
-# Update sources list
-RUN sed -i 's|http://deb.debian.org/debian|http://deb.debian.org/debian-security|g' /etc/apt/sources.list
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Update package lists and install dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils && \
-    apt-get install -y g++ && \
-    apt-get install -y openjdk-11-jdk && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Update package lists
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+
+# Debug step: check available packages
+RUN apt-cache search g++ && apt-cache search openjdk-11-jdk
+
+# Install g++
+RUN apt-get install -y g++
+
+# Install OpenJDK
+RUN apt-get install -y openjdk-11-jdk
+
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /usr/src/app
