@@ -2,14 +2,17 @@ FROM node:20
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update package lists
+# Update package lists and install necessary tools
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
-# Install g++
+# Install g++ and dependencies
 RUN apt-get install -y g++
 
-# Install OpenJDK
-RUN apt-get install -y openjdk-11-jdk
+# Debug step: show available OpenJDK packages
+RUN apt-cache search openjdk
+
+# Install OpenJDK 11
+RUN apt-get update && apt-get install -y openjdk-11-jdk
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -30,4 +33,4 @@ COPY . .
 EXPOSE 8080
 
 # Start the application
-CMD [ "npm", "start" ]
+CMD ["npm", "start"]
