@@ -1,6 +1,9 @@
 FROM node:20
 
-# Update and install dependencies
+# Update sources list
+RUN sed -i 's|http://deb.debian.org/debian|http://deb.debian.org/debian-security|g' /etc/apt/sources.list
+
+# Update package lists and install dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y g++ && \
