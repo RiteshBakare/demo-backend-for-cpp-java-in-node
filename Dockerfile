@@ -3,16 +3,15 @@ FROM node:20
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Update package lists and install necessary tools
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
+RUN apt-get update && apt-get install -y --no-install-recommends apt-utils curl
 
 # Install g++ and dependencies
 RUN apt-get install -y g++
 
-# Debug step: show available OpenJDK packages
-RUN apt-cache search openjdk
-
-# Install OpenJDK 11
-RUN apt-get update && apt-get install -y openjdk-11-jdk
+# Add AdoptOpenJDK repository and install OpenJDK 17
+RUN curl -sL https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - && \
+    echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/adoptopenjdk.list && \
+    apt-get update && apt-get install -y adoptopenjdk-17-hotspot
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
